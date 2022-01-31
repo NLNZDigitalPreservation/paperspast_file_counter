@@ -57,7 +57,6 @@ class FileCounter():
 		size = 0;
 
 		self.log_handler("Directory: " + directory)
-		# self.log_handler("File type: " + file_type)
 		self.log_handler("Titlecode: " + titlecode)
 		self.log_handler("Start date: " + start_date)
 		self.log_handler("End date: " + end_date + "\n")
@@ -119,27 +118,24 @@ class FileCounter():
 			print("Start date: " + start_date)
 			print("End date: " + end_date + "\n")
 
-		# if file_type == 'issues':
-		# 	self.log_handler("Number of matching issues: " + str(total) + "\n")
-		# else:
 		self.log_handler("Number of matching files: " + str(total))
 		self.log_handler("Total size of files: " + self.convert_size(size) + "\n")
 
 		return [total, self.convert_size(size)]
 
-if __name__ == '__main__':
-	commands = {'directory': '', 'titlecode': '', 'start_date': '', 'end_date': '', 'file_type': ''}
-	if len(sys.argv) < len(commands):
-		print("Please enter all fields")
-		exit()
+# if __name__ == '__main__':
+# 	commands = {'directory': '', 'titlecode': '', 'start_date': '', 'end_date': '', 'file_type': ''}
+# 	if len(sys.argv) < len(commands):
+# 		print("Please enter all fields")
+# 		exit()
 		
-	for i in range(len(sys.argv)-1):
-		try:
-			params = sys.argv[i+1].split('=', 1)
-			commands[params[0]] = params[1]
-		except Exception as e:
-			print(e)
+# 	for i in range(len(sys.argv)-1):
+# 		try:
+# 			params = sys.argv[i+1].split('=', 1)
+# 			commands[params[0]] = params[1]
+# 		except Exception as e:
+# 			print(e)
 
-	file_counter = FileCounter()
-	file_counter.count_files(commands['directory'], commands['titlecode'], commands['start_date'], commands['end_date'], commands['file_type'])
+# 	file_counter = FileCounter()
+# 	file_counter.count_files(commands['directory'], commands['titlecode'], commands['start_date'], commands['end_date'], commands['file_type'])
 	

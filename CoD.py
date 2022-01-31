@@ -47,7 +47,7 @@ class CoDUI(QMainWindow):
 	def __init__(self):
 		super(CoDUI, self).__init__()
 		
-		uic.loadUi("Cod.ui", self)
+		uic.loadUi("CoD.ui", self)
 
 		self.counting = False
 		self.worker = None
@@ -114,9 +114,9 @@ class CoDUI(QMainWindow):
 
 	def choose_directory(self):
 		# prod:
-		# dialog = QFileDialog(self, "Select directory", str(Path.home()))
+		dialog = QFileDialog(self, "Select directory", str(Path.home()))
 		# testing:
-		dialog = QFileDialog(self, "Select directory", "/media/sf_Y_DRIVE/paperspast/objects/14/other/Newspapers/OCR")
+		# dialog = QFileDialog(self, "Select directory", "/media/sf_Y_DRIVE/paperspast/objects/14/other/Newspapers/OCR")
 
 		dialog.setFileMode(QFileDialog.DirectoryOnly)
 		dialog.exec_()
