@@ -33,7 +33,7 @@ class FileCounter():
 		self.logger = logger
 		self.progress = progress
 
-		issue_name_pattern = re.compile('[A-Z]{2,5}[_][\d]{8}')
+		issue_name_pattern = re.compile('[A-Z]{2,8}[_][\d]{8}')
 
 		DIR = Path(directory)
 		if not DIR.is_dir():
