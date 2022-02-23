@@ -1,4 +1,4 @@
-import math, re, sys, time
+import datetime, math, re, sys, time
 from pathlib import Path
 
 class FileCounter():
@@ -33,7 +33,7 @@ class FileCounter():
 		self.logger = logger
 		self.progress = progress
 
-		issue_name_pattern = re.compile('[A-Z]{2,8}[_][\d]{8}')
+		issue_name_pattern = re.compile('[A-Z]{1,8}[_][\d]{8}')
 
 		DIR = Path(directory)
 		if not DIR.is_dir():
@@ -53,8 +53,13 @@ class FileCounter():
 		start_year = int(start_date[0:4])
 		end_year = int(end_date[0:4])
 
-		total = 0;
-		size = 0;
+		total = 0
+		size = 0
+		created = 0;
+		modified = 0;
+
+		year_folders = 0
+		non_matching_folders = 0
 
 		self.log_handler("Directory: " + directory)
 		self.log_handler("Titlecode: " + titlecode)
@@ -63,7 +68,8 @@ class FileCounter():
 
 		start_time = time.time()
 		for year in path_with_titlecode.glob("*"):
-			if int(year.name) >= start_year and int(year.name) <= end_year:
+			year_folders += 1
+			if year.name.isdigit() and int(year.name) >= start_year and int(year.name) <= end_year:
 				self.progress_handler("Counting files for " + year.name)
 				for issue in year.glob("*"):
 					# Pull out the date from the folder name
@@ -99,7 +105,11 @@ class FileCounter():
 												size += item.stat().st_size
 											if item.name != issue.name + '.pdf' and item.suffix == '.pdf' and 'Page PDF' in file_types:
 												total += 1
-												size += item.stat().st_size 
+												size += item.stat().st_size
+										if item.stat().st_ctime > created:
+											created = item.stat().st_ctime
+										if item.stat().st_mtime > modified:
+											modified = item.stat().st_mtime
 
 										if progress:
 											progress.emit(str(total))
@@ -108,18 +118,28 @@ class FileCounter():
 				if logger == None:							
 					print("\n")
 
+			elif not year.name.isdigit():
+				non_matching_folders += 1
+
 		end_time = time.time()
 		self.progress_handler("Finished in %.2f seconds" % (end_time - start_time))
 
-		if self.logger == None:	
-			print("Directory: " + directory)
-			# print("File type: " + file_type)
-			print("Titlecode: " + titlecode)
-			print("Start date: " + start_date)
-			print("End date: " + end_date + "\n")
+		if non_matching_folders == year_folders:
+			self.log_handler("Unexpected folder structure in " + str(path_with_titlecode))
 
-		self.log_handler("Number of matching files: " + str(total))
-		self.log_handler("Total size of files: " + self.convert_size(size) + "\n")
+		else:	
+			if self.logger == None:	
+				print("Directory: " + directory)
+				# print("File type: " + file_type)
+				print("Titlecode: " + titlecode)
+				print("Start date: " + start_date)
+				print("End date: " + end_date + "\n")
+
+			self.log_handler("Number of matching files: " + str(total))
+			self.log_handler("Total size of files: " + self.convert_size(size) + "\n")
+			if total > 0:
+				self.log_handler("Latest created date: " + str(datetime.datetime.fromtimestamp(created, tz=datetime.timezone.utc)))
+				self.log_handler("Latest modified date: " + str(datetime.datetime.fromtimestamp(modified, tz=datetime.timezone.utc)))
 
 		return [total, self.convert_size(size)]
 
