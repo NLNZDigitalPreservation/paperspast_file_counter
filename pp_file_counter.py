@@ -130,7 +130,6 @@ class FileCounter():
 		else:	
 			if self.logger == None:	
 				print("Directory: " + directory)
-				# print("File type: " + file_type)
 				print("Titlecode: " + titlecode)
 				print("Start date: " + start_date)
 				print("End date: " + end_date + "\n")
@@ -138,8 +137,8 @@ class FileCounter():
 			self.log_handler("Number of matching files: " + str(total))
 			self.log_handler("Total size of files: " + self.convert_size(size) + "\n")
 			if total > 0:
-				self.log_handler("Latest created date: " + str(datetime.datetime.fromtimestamp(created, tz=datetime.timezone.utc)))
-				self.log_handler("Latest modified date: " + str(datetime.datetime.fromtimestamp(modified, tz=datetime.timezone.utc)))
+				self.log_handler("Latest created date: " + datetime.datetime.fromtimestamp(created).strftime("%b %d %Y %H:%M"))
+				self.log_handler("Latest modified date: " + datetime.datetime.fromtimestamp(modified).strftime("%b %d %Y %H:%M"))
 
 		return [total, self.convert_size(size)]
 
