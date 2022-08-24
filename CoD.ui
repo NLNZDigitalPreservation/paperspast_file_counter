@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>881</width>
-    <height>644</height>
+    <width>876</width>
+    <height>688</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -133,7 +133,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>560</y>
+      <y>610</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -153,7 +153,7 @@
       <x>360</x>
       <y>130</y>
       <width>491</width>
-      <height>471</height>
+      <height>461</height>
      </rect>
     </property>
     <property name="font">
@@ -227,10 +227,13 @@
     </property>
    </widget>
    <widget class="QGroupBox" name="ac_group">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>440</y>
+      <y>490</y>
       <width>141</width>
       <height>101</height>
      </rect>
@@ -274,13 +277,16 @@
      <property name="text">
       <string>Issue PDF</string>
      </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="ie_mets_group">
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>370</y>
+      <y>420</y>
       <width>141</width>
       <height>61</height>
      </rect>
@@ -317,7 +323,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>370</y>
+      <y>420</y>
       <width>141</width>
       <height>61</height>
      </rect>
@@ -354,7 +360,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>440</y>
+      <y>490</y>
       <width>141</width>
       <height>101</height>
      </rect>
@@ -420,7 +426,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>340</y>
+      <y>390</y>
       <width>211</width>
       <height>21</height>
      </rect>
@@ -432,6 +438,24 @@
     </property>
     <property name="text">
      <string>File types</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="issue_check">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>350</y>
+      <width>221</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Issue Count Only</string>
     </property>
    </widget>
   </widget>
