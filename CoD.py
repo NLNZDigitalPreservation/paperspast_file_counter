@@ -199,7 +199,7 @@ class CoDUI(QMainWindow):
 			elif start_date > end_date:
 				self.progress_text.setText('Make sure the start date is earlier than the end date')
 
-			elif self.issues_only == False and 'PM_01' not in self.folders and 'IE_METS' not in self.folders and len(self.file_types) == 0:
+			elif not self.issues_only and 'PM_01' not in self.folders and 'IE_METS' not in self.folders and len(self.file_types) == 0:
 				self.progress_text.setText('Please select a file type')
 
 			else:

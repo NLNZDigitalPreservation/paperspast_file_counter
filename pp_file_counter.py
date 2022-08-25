@@ -78,14 +78,14 @@ class FileCounter():
 					date = int(re.sub(r'^.*?_', '', issue_folder))
 					if (issue_name_pattern.match(issue_folder)) and (date >= int(start_date) and date <= int(end_date)):
 						# Count issues only
-						if issues_only == True:
+						if issues_only:
 							total += 1
 							
 							if self.terminate:
 								self.progress_handler("Process cancelled")
 								self.terminate = False
 								return
-							if total_size == True:
+							if total_size:
 								for f in issue.glob('**/*'):
 									if f.is_file:
 										size += f.stat().st_size
@@ -158,8 +158,8 @@ class FileCounter():
 				print("Start date: " + start_date)
 				print("End date: " + end_date + "\n")
 
-			self.log_handler("Number of matching files: " + str(total))
-			if (issues_only == True and total_size == True) or (issues_only == False):
+			self.log_handler("Number of matching " + ("issues: " if issues_only else "files: ") + str(total))
+			if (issues_only and total_size) or (not issues_only):
 				self.log_handler("Total size of files: " + self.convert_size(size) + "\n")
 				if (total > 0):
 					self.log_handler("Latest created date: " + datetime.datetime.fromtimestamp(created).strftime("%b %d %Y %H:%M"))
