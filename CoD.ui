@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>876</width>
-    <height>688</height>
+    <width>871</width>
+    <height>731</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -129,31 +129,13 @@
      <string>End date (YYYYMMDD)</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="start_button">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>610</y>
-      <width>131</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Start</string>
-    </property>
-   </widget>
    <widget class="QTextBrowser" name="results_box">
     <property name="geometry">
      <rect>
       <x>360</x>
       <y>130</y>
       <width>491</width>
-      <height>461</height>
+      <height>501</height>
      </rect>
     </property>
     <property name="font">
@@ -226,16 +208,13 @@
      </font>
     </property>
    </widget>
-   <widget class="QGroupBox" name="ac_group">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
+   <widget class="QGroupBox" name="issue_group">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>490</y>
-      <width>141</width>
-      <height>101</height>
+      <x>20</x>
+      <y>340</y>
+      <width>311</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
@@ -244,7 +223,7 @@
      </font>
     </property>
     <property name="title">
-     <string>AC_01</string>
+     <string>Count Issues</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
@@ -252,183 +231,249 @@
     <property name="checked">
      <bool>false</bool>
     </property>
-    <widget class="QCheckBox" name="ac_page_check">
+    <widget class="QCheckBox" name="size_check">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>30</y>
-       <width>121</width>
+       <width>221</width>
        <height>23</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>Page PDF</string>
+      <string>Get total size</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="ac_issue_check">
+   </widget>
+   <widget class="QGroupBox" name="file_group">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>410</y>
+      <width>311</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Count File Types</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <widget class="QGroupBox" name="ie_mets_group">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>50</y>
+       <x>160</x>
+       <y>30</y>
        <width>121</width>
-       <height>23</height>
+       <height>61</height>
       </rect>
      </property>
-     <property name="text">
-      <string>Issue PDF</string>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="title">
+      <string>IE_METS</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
      </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>IE_METS</string>
+      </property>
+     </widget>
     </widget>
-   </widget>
-   <widget class="QGroupBox" name="ie_mets_group">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>420</y>
-      <width>141</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>IE_METS</string>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-    <widget class="QLabel" name="label_2">
+    <widget class="QGroupBox" name="pm_group">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>30</y>
        <width>121</width>
-       <height>17</height>
+       <height>61</height>
       </rect>
      </property>
-     <property name="text">
-      <string>IE_METS</string>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
      </property>
+     <property name="title">
+      <string>PM_01</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>67</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TIFF</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="ac_group">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>100</y>
+       <width>121</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="title">
+      <string>AC_01</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <widget class="QCheckBox" name="ac_page_check">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>121</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Page PDF</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="ac_issue_check">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>101</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Issue PDF</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="mm_group">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>121</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="title">
+      <string>MM_01</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <widget class="QCheckBox" name="mm_tiff_check">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>92</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TIFF</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="mm_alto_check">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>92</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ALTO</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="mm_mets_check">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>92</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>METS</string>
+      </property>
+     </widget>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="pm_group">
+   <widget class="QPushButton" name="start_button">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>420</y>
-      <width>141</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>PM_01</string>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>67</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>TIFF</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="mm_group">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>490</y>
-      <width>141</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>MM_01</string>
-    </property>
-    <property name="flat">
-     <bool>false</bool>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-    <widget class="QCheckBox" name="mm_tiff_check">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>92</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>TIFF</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="mm_alto_check">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>92</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>ALTO</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="mm_mets_check">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>70</y>
-       <width>92</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>METS</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QLabel" name="file_types_label">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>390</y>
-      <width>211</width>
-      <height>21</height>
+      <y>640</y>
+      <width>131</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -437,25 +482,7 @@
      </font>
     </property>
     <property name="text">
-     <string>File types</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="issue_check">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>350</y>
-      <width>221</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Issue Count Only</string>
+     <string>Start</string>
     </property>
    </widget>
   </widget>
