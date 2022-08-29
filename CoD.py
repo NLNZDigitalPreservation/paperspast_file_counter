@@ -22,9 +22,8 @@ class Worker(QThread):
 		self.logger = self.signals.logger
 		self.file_counter = None
 
-	def setParams(self, issues_only, total_size, directory, title_code, start_date, end_date, folders, file_types):
+	def setParams(self, issues_only, directory, title_code, start_date, end_date, folders, file_types):
 		self.issues_only = issues_only
-		self.total_size = total_size
 		self.directory = directory
 		self.title_code = title_code
 		self.start_date = start_date
@@ -41,7 +40,7 @@ class Worker(QThread):
 			self.file_counter = None
 
 		self.file_counter = pp_file_counter.FileCounter()
-		self.file_counter.count_files(self.issues_only, self.total_size, self.directory, self.title_code, self.start_date, self.end_date, self.folders, self.file_types, self.logger, self.progress)
+		self.file_counter.count_files(self.issues_only, self.directory, self.title_code, self.start_date, self.end_date, self.folders, self.file_types, self.logger, self.progress)
 		self.finished.emit()
 
 
@@ -67,13 +66,11 @@ class CoDUI(QMainWindow):
 		self.start_button = self.findChild(QPushButton, "start_button")
 		self.results_box = self.findChild(QTextBrowser, "results_box")
 		self.progress_text = self.findChild(QTextBrowser, "progress_text")
-		
-		self.issue_group = self.findChild(QGroupBox, "issue_group")
-		self.issue_group.clicked.connect(self.onIssueChecked)
-		self.size_check = self.findChild(QCheckBox, "size_check")
-		
-		self.file_group = self.findChild(QGroupBox, "file_group")
-		self.file_group.clicked.connect(self.onFileChecked)
+
+		self.issues_radio = self.findChild(QRadioButton, "issues_radio")
+		self.issues_radio.toggled.connect(self.toggleSearchType)
+		self.files_radio = self.findChild(QRadioButton, "files_radio")
+		self.files_radio.toggled.connect(self.toggleSearchType)
 
 		self.pm_group = self.findChild(QGroupBox, "pm_group")
 
@@ -98,20 +95,17 @@ class CoDUI(QMainWindow):
 		self.show()
 	
 	@pyqtSlot()
-	def onIssueChecked(self):
-		if self.issue_group.isChecked():
-			self.file_group.setChecked(False)
-			self.file_group.setEnabled(False)
+	def toggleSearchType(self):
+		radioBtn = self.sender()
+		files_group = [self.pm_group, self.ie_mets_group, self.mm_group, self.ac_group]
+		if radioBtn.text() == "Count Issues":
+			for group in files_group:
+				group.setEnabled(False)
+			self.issues_only = True
 		else:
-			self.file_group.setEnabled(True)
-			
-	@pyqtSlot()
-	def onFileChecked(self):
-		if self.file_group.isChecked():
-			self.issue_group.setChecked(False)
-			self.issue_group.setEnabled(False)
-		else:
-			self.issue_group.setEnabled(True)
+			for group in files_group:
+				group.setEnabled(True)
+			self.issues_only = False
 		
 	def add_file_types(self):
 		self.folders = set()
@@ -178,17 +172,8 @@ class CoDUI(QMainWindow):
 			title_code = self.title_code_input.text().strip().upper()
 			start_date = self.start_date_input.text().strip()
 			end_date = self.end_date_input.text().strip()
-			
-			if self.issue_group.isChecked():
-				self.issues_only = True
-				if self.size_check.isChecked():
-					self.total_size = True
-				else:
-					self.total_size = False
-					
-			else:
-				self.issues_only = False
-				self.total_size = False
+
+			if not self.issues_only:
 				self.add_file_types()
 
 			self.results_box.clear()
@@ -204,7 +189,7 @@ class CoDUI(QMainWindow):
 
 			else:
 				self.worker = Worker(self)
-				self.worker.setParams(self.issues_only, self.total_size, directory, title_code, start_date, end_date, self.folders, self.file_types)
+				self.worker.setParams(self.issues_only, directory, title_code, start_date, end_date, self.folders, self.file_types)
 				self.worker.logger.connect(self.logger_handler)
 				self.worker.progress.connect(self.progress_handler)
 				self.worker.finished.connect(self.finishWorker)

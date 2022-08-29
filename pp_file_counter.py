@@ -29,7 +29,7 @@ class FileCounter():
 		elif self.progress == None:
 			print(message)
 
-	def count_files(self, issues_only, total_size, directory, titlecode, start_date, end_date, folders, file_types, logger=None, progress=None):
+	def count_files(self, issues_only, directory, titlecode, start_date, end_date, folders, file_types, logger=None, progress=None):
 		self.logger = logger
 		self.progress = progress
 
@@ -80,19 +80,10 @@ class FileCounter():
 						# Count issues only
 						if issues_only:
 							total += 1
-							
 							if self.terminate:
 								self.progress_handler("Process cancelled")
 								self.terminate = False
 								return
-							if total_size:
-								for f in issue.glob('**/*'):
-									if f.is_file:
-										size += f.stat().st_size
-										if f.stat().st_ctime > created:
-											created = f.stat().st_ctime
-										if f.stat().st_mtime > modified:
-											modified = f.stat().st_mtime
 							if progress:
 								progress.emit(str(total))
 							else:
@@ -159,7 +150,7 @@ class FileCounter():
 				print("End date: " + end_date + "\n")
 
 			self.log_handler("Number of matching " + ("issues: " if issues_only else "files: ") + str(total))
-			if (issues_only and total_size) or (not issues_only):
+			if not issues_only:
 				self.log_handler("Total size of files: " + self.convert_size(size) + "\n")
 				if (total > 0):
 					self.log_handler("Latest created date: " + datetime.datetime.fromtimestamp(created).strftime("%b %d %Y %H:%M"))
