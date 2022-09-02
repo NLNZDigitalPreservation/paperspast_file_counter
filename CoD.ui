@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>881</width>
-    <height>644</height>
+    <width>871</width>
+    <height>703</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -129,31 +129,13 @@
      <string>End date (YYYYMMDD)</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="start_button">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>560</y>
-      <width>131</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Start</string>
-    </property>
-   </widget>
    <widget class="QTextBrowser" name="results_box">
     <property name="geometry">
      <rect>
       <x>360</x>
       <y>130</y>
       <width>491</width>
-      <height>471</height>
+      <height>461</height>
      </rect>
     </property>
     <property name="font">
@@ -226,12 +208,91 @@
      </font>
     </property>
    </widget>
-   <widget class="QGroupBox" name="ac_group">
+   <widget class="QPushButton" name="start_button">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>440</y>
-      <width>141</width>
+      <x>20</x>
+      <y>610</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Start</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="issues_radio">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>350</y>
+      <width>112</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Count Issues</string>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="ie_mets_group">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>410</y>
+      <width>121</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>IE_METS</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>121</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>IE_METS</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="ac_group">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>490</y>
+      <width>121</width>
       <height>101</height>
      </rect>
     </property>
@@ -267,49 +328,15 @@
       <rect>
        <x>10</x>
        <y>50</y>
-       <width>121</width>
+       <width>101</width>
        <height>23</height>
       </rect>
      </property>
      <property name="text">
       <string>Issue PDF</string>
      </property>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="ie_mets_group">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>370</y>
-      <width>141</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>IE_METS</string>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>121</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>IE_METS</string>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
@@ -317,8 +344,8 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>370</y>
-      <width>141</width>
+      <y>410</y>
+      <width>121</width>
       <height>61</height>
      </rect>
     </property>
@@ -354,8 +381,8 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>440</y>
-      <width>141</width>
+      <y>490</y>
+      <width>121</width>
       <height>101</height>
      </rect>
     </property>
@@ -416,13 +443,13 @@
      </property>
     </widget>
    </widget>
-   <widget class="QLabel" name="file_types_label">
+   <widget class="QRadioButton" name="files_radio">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>340</y>
-      <width>211</width>
-      <height>21</height>
+      <y>380</y>
+      <width>201</width>
+      <height>23</height>
      </rect>
     </property>
     <property name="font">
@@ -431,7 +458,10 @@
      </font>
     </property>
     <property name="text">
-     <string>File types</string>
+     <string>Count File Types</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>

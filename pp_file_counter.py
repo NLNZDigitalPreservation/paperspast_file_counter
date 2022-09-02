@@ -29,7 +29,7 @@ class FileCounter():
 		elif self.progress == None:
 			print(message)
 
-	def count_files(self, directory, titlecode, start_date, end_date, folders, file_types, logger=None, progress=None):
+	def count_files(self, issues_only, directory, titlecode, start_date, end_date, folders, file_types, logger=None, progress=None):
 		self.logger = logger
 		self.progress = progress
 
@@ -72,49 +72,64 @@ class FileCounter():
 			if year.name.isdigit() and int(year.name) >= start_year and int(year.name) <= end_year:
 				self.progress_handler("Counting files for " + year.name)
 				for issue in year.glob("*"):
+					# Srip any issue suffixes
+					issue_folder = re.sub('_\d{1,3}$', '', issue.name)
 					# Pull out the date from the folder name
-					date = int(re.sub(r'^.*?_', '', issue.name))
-					if (issue_name_pattern.match(issue.name)) and (date >= int(start_date) and date <= int(end_date)):
-						for folder in issue.glob("*"):
-							if folder.name in folders:
-								for item in folder.iterdir():
-									if self.terminate:
-										self.progress_handler("Process cancelled")
-										self.terminate = False
-										return
-									if item.is_file:
-										if folder.name == 'IE_METS' and item.name == (issue.name + '_IE_METS.xml'):
-											total += 1
-											size += item.stat().st_size
-										if folder.name == 'PM_01' and (item.suffix == '.tif' or item.suffix == '.tiff'):
-											total += 1
-											size += item.stat().st_size
-										if folder.name == 'MM_01':
-											if (item.suffix == '.tif' or item.suffix == '.tiff') and 'TIFF' in file_types:
+					date = int(re.sub(r'^.*?_', '', issue_folder))
+					if (issue_name_pattern.match(issue_folder)) and (date >= int(start_date) and date <= int(end_date)):
+						# Count issues only
+						if issues_only:
+							total += 1
+							if self.terminate:
+								self.progress_handler("Process cancelled")
+								self.terminate = False
+								return
+							if progress:
+								progress.emit(str(total))
+							else:
+								print(".", sep='', end='', flush=True)
+						# Otherwise count specific file types
+						else:
+							for folder in issue.glob("*"):
+								if folder.name in folders:
+									for item in folder.iterdir():
+										if self.terminate:
+											self.progress_handler("Process cancelled")
+											self.terminate = False
+											return
+										if item.is_file:
+											if folder.name == 'IE_METS' and item.name == (issue.name + '_IE_METS.xml'):
 												total += 1
 												size += item.stat().st_size
-											if item.name == 'mets.xml' and 'METS' in file_types:
+											if folder.name == 'PM_01' and (item.suffix == '.tif' or item.suffix == '.tiff'):
 												total += 1
 												size += item.stat().st_size
-											if item.suffix == '.xml' and item.name != 'mets.xml' and 'ALTO' in file_types:
-												total += 1
-												size += item.stat().st_size
-										if folder.name == 'AC_01':
-											if item.name == issue.name + '.pdf' and 'Issue PDF' in file_types:
-												total += 1
-												size += item.stat().st_size
-											if item.name != issue.name + '.pdf' and item.suffix == '.pdf' and 'Page PDF' in file_types:
-												total += 1
-												size += item.stat().st_size
-										if item.stat().st_ctime > created:
-											created = item.stat().st_ctime
-										if item.stat().st_mtime > modified:
-											modified = item.stat().st_mtime
+											if folder.name == 'MM_01':
+												if (item.suffix == '.tif' or item.suffix == '.tiff') and 'TIFF' in file_types:
+													total += 1
+													size += item.stat().st_size
+												if item.name == 'mets.xml' and 'METS' in file_types:
+													total += 1
+													size += item.stat().st_size
+												if item.suffix == '.xml' and item.name != 'mets.xml' and 'ALTO' in file_types:
+													total += 1
+													size += item.stat().st_size
+											if folder.name == 'AC_01':
+												if item.name == issue.name + '.pdf' and 'Issue PDF' in file_types:
+													total += 1
+													size += item.stat().st_size
+												if item.name != issue.name + '.pdf' and item.suffix == '.pdf' and 'Page PDF' in file_types:
+													total += 1
+													size += item.stat().st_size
+											if item.stat().st_ctime > created:
+												created = item.stat().st_ctime
+											if item.stat().st_mtime > modified:
+												modified = item.stat().st_mtime
 
-										if progress:
-											progress.emit(str(total))
-										else:
-											print(".", sep='', end='', flush=True)
+											if progress:
+												progress.emit(str(total))
+											else:
+												print(".", sep='', end='', flush=True)
 				if logger == None:							
 					print("\n")
 
@@ -134,11 +149,12 @@ class FileCounter():
 				print("Start date: " + start_date)
 				print("End date: " + end_date + "\n")
 
-			self.log_handler("Number of matching files: " + str(total))
-			self.log_handler("Total size of files: " + self.convert_size(size) + "\n")
-			if total > 0:
-				self.log_handler("Latest created date: " + datetime.datetime.fromtimestamp(created).strftime("%b %d %Y %H:%M"))
-				self.log_handler("Latest modified date: " + datetime.datetime.fromtimestamp(modified).strftime("%b %d %Y %H:%M"))
+			self.log_handler("Number of matching " + ("issues: " if issues_only else "files: ") + str(total))
+			if not issues_only:
+				self.log_handler("Total size of files: " + self.convert_size(size) + "\n")
+				if (total > 0):
+					self.log_handler("Latest created date: " + datetime.datetime.fromtimestamp(created).strftime("%b %d %Y %H:%M"))
+					self.log_handler("Latest modified date: " + datetime.datetime.fromtimestamp(modified).strftime("%b %d %Y %H:%M"))
 
 		return [total, self.convert_size(size)]
 
