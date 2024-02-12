@@ -22,7 +22,7 @@ class Worker(QThread):
 		self.logger = self.signals.logger
 		self.file_counter = None
 
-	def setParams(self, issues_only, directory, title_code, start_date, end_date, folders, file_types):
+	def setParams(self, issues_only, directory, title_code, start_date, end_date, folders, file_types, total_only):
 		self.issues_only = issues_only
 		self.directory = directory
 		self.title_code = title_code
@@ -30,6 +30,7 @@ class Worker(QThread):
 		self.end_date = end_date
 		self.file_types = file_types
 		self.folders = folders
+		self.total_only = total_only
 
 	def stop(self):
 		self.file_counter.stop()
@@ -40,7 +41,7 @@ class Worker(QThread):
 			self.file_counter = None
 
 		self.file_counter = pp_file_counter.FileCounter()
-		self.file_counter.count_files(self.issues_only, self.directory, self.title_code, self.start_date, self.end_date, self.folders, self.file_types, self.logger, self.progress)
+		self.file_counter.count_files(self.issues_only, self.directory, self.title_code, self.start_date, self.end_date, self.folders, self.file_types, self.total_only, self.logger, self.progress)
 		self.finished.emit()
 
 
@@ -85,6 +86,8 @@ class CoDUI(QMainWindow):
 		self.ac_page_check = self.findChild(QCheckBox, "ac_page_check")
 		self.ac_issue_check = self.findChild(QCheckBox, "ac_issue_check")
 
+		self.total_only_check = self.findChild(QCheckBox, "total_only_check")
+
 		date_validator = QIntValidator(0, 99999999, self)
 		self.start_date_input.setValidator(date_validator)
 		self.end_date_input.setValidator(date_validator)
@@ -97,7 +100,7 @@ class CoDUI(QMainWindow):
 	@pyqtSlot()
 	def toggleSearchType(self):
 		radioBtn = self.sender()
-		files_group = [self.pm_group, self.ie_mets_group, self.mm_group, self.ac_group]
+		files_group = [self.pm_group, self.ie_mets_group, self.mm_group, self.ac_group, self.total_only_check]
 		if radioBtn.text() == "Count Issues":
 			for group in files_group:
 				group.setEnabled(False)
@@ -189,7 +192,7 @@ class CoDUI(QMainWindow):
 
 			else:
 				self.worker = Worker(self)
-				self.worker.setParams(self.issues_only, directory, title_code, start_date, end_date, self.folders, self.file_types)
+				self.worker.setParams(self.issues_only, directory, title_code, start_date, end_date, self.folders, self.file_types, self.total_only_check.isChecked())
 				self.worker.logger.connect(self.logger_handler)
 				self.worker.progress.connect(self.progress_handler)
 				self.worker.finished.connect(self.finishWorker)
