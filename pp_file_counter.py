@@ -136,6 +136,9 @@ class FileCounter():
 												if item.name == 'mets.xml' and 'METS' in file_types:
 													total += 1
 													size += item.stat().st_size
+													if not total_only:
+														MM_mets_total += 1
+														MM_mets_size += item.stat().st_size
 												if item.suffix == '.xml' and item.name != 'mets.xml' and 'ALTO' in file_types:
 													total += 1
 													size += item.stat().st_size
@@ -190,28 +193,28 @@ class FileCounter():
 				if (total > 0):
 					if not total_only:
 						if 'IE_METS' in folders:
-							self.log_handler("Number of matching IE_METS files: " + str(IE_METS_total))
-							self.log_handler("Total size of IE_METS files: " + self.convert_size(IE_METS_size) + "\n")
+							self.log_handler("IE_METS files: " + str(IE_METS_total))
+							self.log_handler("IE_METS size: " + self.convert_size(IE_METS_size) + "\n")
 						if 'PM_01' in folders:
-							self.log_handler("Number of matching PM TIFF files: " + str(PM_total))
-							self.log_handler("Total size of PM TIFF files: " + self.convert_size(PM_size) + "\n")
+							self.log_handler("PM TIFF files: " + str(PM_total))
+							self.log_handler("PM TIFF size: " + self.convert_size(PM_size) + "\n")
 						if 'MM_01' in folders:
 							if 'TIFF' in file_types:
-								self.log_handler("Number of matching MM TIFF files: " + str(MM_tiff_total))
-								self.log_handler("Total size of MM TIFF files: " + self.convert_size(MM_tiff_size) + "\n")
+								self.log_handler("MM TIFF files: " + str(MM_tiff_total))
+								self.log_handler("MM TIFF size: " + self.convert_size(MM_tiff_size) + "\n")
 							if 'METS' in file_types:
-								self.log_handler("Number of matching MM METS files: " + str(MM_mets_total))
-								self.log_handler("Total size of MM METS files: " + self.convert_size(MM_mets_size) + "\n")
+								self.log_handler("MM METS files: " + str(MM_mets_total))
+								self.log_handler("MM METS size: " + self.convert_size(MM_mets_size) + "\n")
 							if 'ALTO' in file_types:
-								self.log_handler("Number of matching MM ALTO files: " + str(MM_alto_total))
-								self.log_handler("Total size of MM ALTO files: " + self.convert_size(MM_alto_size) + "\n")
+								self.log_handler("MM ALTO files: " + str(MM_alto_total))
+								self.log_handler("MM ALTO size: " + self.convert_size(MM_alto_size) + "\n")
 						if 'AC_01' in folders:
 							if 'Page PDF' in file_types:
-								self.log_handler("Number of matching AC Page PDF files: " + str(AC_page_total))
-								self.log_handler("Total size of AC Page files: " + self.convert_size(AC_page_size) + "\n")
+								self.log_handler("AC Page PDF files: " + str(AC_page_total))
+								self.log_handler("AC Page PDF size: " + self.convert_size(AC_page_size) + "\n")
 							if 'Issue PDF' in file_types:
-								self.log_handler("Number of matching AC Issue PDF files: " + str(AC_issue_total))
-								self.log_handler("Total size of AC Issue files: " + self.convert_size(AC_issue_size) + "\n")
+								self.log_handler("AC Issue PDF files: " + str(AC_issue_total))
+								self.log_handler("AC Issue PDF files: " + self.convert_size(AC_issue_size) + "\n")
 
 					self.log_handler("Latest created date: " + datetime.datetime.fromtimestamp(created).strftime("%b %d %Y %H:%M"))
 					self.log_handler("Latest modified date: " + datetime.datetime.fromtimestamp(modified).strftime("%b %d %Y %H:%M") + "\n")
