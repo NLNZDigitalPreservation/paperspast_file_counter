@@ -1,6 +1,8 @@
 import datetime, math, re, sys, time
 from pathlib import Path
 
+import validation
+
 class FileCounter():
 	def __init__(self):
 		self.terminate = False
@@ -75,151 +77,155 @@ class FileCounter():
 		AC_issue_size = 0
 
 		year_folders = 0
-		non_matching_folders = 0
 
 		self.log_handler("Directory: " + directory)
 		self.log_handler("Titlecode: " + titlecode)
 		self.log_handler("Start date: " + start_date)
 		self.log_handler("End date: " + end_date + "\n")
 
-		start_time = time.time()
-		for year in path_with_titlecode.glob("*"):
-			year_folders += 1
-			if year.name.isdigit() and int(year.name) >= start_year and int(year.name) <= end_year:
-				self.progress_handler("Counting files for " + year.name)
-				for issue in year.glob("*"):
-					# Srip any issue suffixes
-					issue_folder = re.sub('_\d{1,3}$', '', issue.name)
-					# Pull out the date from the folder name
-					date = int(re.sub(r'^.*?_', '', issue_folder))
-					if (issue_name_pattern.match(issue_folder)) and (date >= int(start_date) and date <= int(end_date)):
-						# Count issues only
-						if issues_only:
-							total += 1
-							if self.terminate:
-								self.progress_handler("Process cancelled")
-								self.terminate = False
-								return
-							if progress:
-								progress.emit(str(total))
-							else:
-								print(".", sep='', end='', flush=True)
-						# Otherwise count specific file types
-						else:
-							for folder in issue.glob("*"):
-								if folder.name in folders:
-									for item in folder.iterdir():
-										if self.terminate:
-											self.progress_handler("Process cancelled")
-											self.terminate = False
-											return
-										if item.is_file:
-											if folder.name == 'IE_METS' and item.name == (issue.name + '_IE_METS.xml'):
-												total += 1												
-												size += item.stat().st_size
-												if not total_only:
-													IE_METS_total += 1
-													IE_METS_size += item.stat().st_size
-											if folder.name == 'PM_01' and (item.suffix == '.tif' or item.suffix == '.tiff'):
-												total += 1
-												size += item.stat().st_size
-												if not total_only:
-													PM_total += 1
-													PM_size += item.stat().st_size
-											if folder.name == 'MM_01':
-												if (item.suffix == '.tif' or item.suffix == '.tiff') and 'TIFF' in file_types:
-													total += 1
-													size += item.stat().st_size
-													if not total_only:
-														MM_tiff_total += 1
-														MM_tiff_size += item.stat().st_size
-												if item.name == 'mets.xml' and 'METS' in file_types:
-													total += 1
-													size += item.stat().st_size
-													if not total_only:
-														MM_mets_total += 1
-														MM_mets_size += item.stat().st_size
-												if item.suffix == '.xml' and item.name != 'mets.xml' and 'ALTO' in file_types:
-													total += 1
-													size += item.stat().st_size
-													if not total_only:
-														MM_alto_total += 1
-														MM_alto_size += item.stat().st_size
-											if folder.name == 'AC_01':
-												if item.name == issue.name + '.pdf' and 'Issue PDF' in file_types:
-													total += 1
-													size += item.stat().st_size
-													if not total_only:
-														AC_issue_total += 1
-														AC_issue_size += item.stat().st_size
-												if item.name != issue.name + '.pdf' and item.suffix == '.pdf' and 'Page PDF' in file_types:
-													total += 1
-													size += item.stat().st_size
-													if not total_only:
-														AC_page_total += 1
-														AC_page_size += item.stat().st_size
-											if item.stat().st_ctime > created:
-												created = item.stat().st_ctime
-											if item.stat().st_mtime > modified:
-												modified = item.stat().st_mtime
+		try:
+			start_time = time.time()
+			for year in path_with_titlecode.glob("*"):
+				year_folders += 1
+				if validation.year_folder(year, path_with_titlecode, self.log_handler) and int(year.name) >= start_year and int(year.name) <= end_year:
+					self.progress_handler("Counting files for " + year.name)
+					for issue in year.glob("*"):
+						if (validation.issue_folder(issue, year, self.log_handler)):
+							# Srip any issue suffixes
+							issue_folder = re.sub('_\d{1,3}$', '', issue.name)
+							# Pull out the date from the folder name
+							date = int(re.sub(r'^.*?_', '', issue_folder))
+							if (date >= int(start_date) and date <= int(end_date)):
+								# Count issues only
+								if issues_only:
+									total += 1
+									if self.terminate:
+										self.progress_handler("Process cancelled")
+										self.terminate = False
+										return
+									if progress:
+										progress.emit(str(total))
+									else:
+										print(".", sep='', end='', flush=True)
+								# Otherwise count specific file types
+								else:
+									for folder in issue.glob("*"):
+										if validation.file_type_folders(folder, issue, self.log_handler) and folder.name in folders:
+											for item in folder.iterdir():
+												if self.terminate:
+													self.progress_handler("Process cancelled")
+													self.terminate = False
+													return
+												if item.is_file():
+													if folder.name == 'IE_METS' and validation.ie_mets_file(item, issue.name, folder, self.log_handler):
+														total += 1												
+														size += item.stat().st_size
+														if not total_only:
+															IE_METS_total += 1
+															IE_METS_size += item.stat().st_size
+													if folder.name == 'PM_01' and validation.pm_file(item, folder, self.log_handler):
+														total += 1
+														size += item.stat().st_size
+														if not total_only:
+															PM_total += 1
+															PM_size += item.stat().st_size
+													if folder.name == 'MM_01':
+														if validation.mm_file(item, folder, self.log_handler):
+															if (item.suffix == '.tif' or item.suffix == '.tiff') and 'TIFF' in file_types:
+																total += 1
+																size += item.stat().st_size
+																if not total_only:
+																	MM_tiff_total += 1
+																	MM_tiff_size += item.stat().st_size
+															if item.name == 'mets.xml' and 'METS' in file_types:
+																total += 1
+																size += item.stat().st_size
+																if not total_only:
+																	MM_mets_total += 1
+																	MM_mets_size += item.stat().st_size
+															if item.suffix == '.xml' and item.name != 'mets.xml' and 'ALTO' in file_types:
+																total += 1
+																size += item.stat().st_size
+																if not total_only:
+																	MM_alto_total += 1
+																	MM_alto_size += item.stat().st_size
+													if folder.name == 'AC_01':
+														if validation.ac_file(item, folder, self.log_handler):
+															if item.name == issue.name + '.pdf' and 'Issue PDF' in file_types:
+																total += 1
+																size += item.stat().st_size
+																if not total_only:
+																	AC_issue_total += 1
+																	AC_issue_size += item.stat().st_size
+															if item.name != issue.name + '.pdf' and item.suffix == '.pdf' and 'Page PDF' in file_types:
+																total += 1
+																size += item.stat().st_size
+																if not total_only:
+																	AC_page_total += 1
+																	AC_page_size += item.stat().st_size
+													if item.stat().st_ctime > created:
+														created = item.stat().st_ctime
+													if item.stat().st_mtime > modified:
+														modified = item.stat().st_mtime
 
-											if progress:
-												progress.emit(str(total))
-											else:
-												print(".", sep='', end='', flush=True)
-				if logger == None:							
-					print("\n")
+													if progress:
+														progress.emit(str(total))
+													else:
+														print(".", sep='', end='', flush=True)
+												else:
+													self.log_handler(f"Unexpected folder {item.name} in {folder} \n")		
+					if logger == None:							
+						print("\n")
 
-			elif not year.name.isdigit():
-				non_matching_folders += 1
+			if not self.terminate:
+				end_time = time.time()
+				self.progress_handler("Finished in %.2f seconds" % (end_time - start_time))
 
-		end_time = time.time()
-		self.progress_handler("Finished in %.2f seconds" % (end_time - start_time))
+				if self.logger == None:	
+					print("Directory: " + directory)
+					print("Titlecode: " + titlecode)
+					print("Start date: " + start_date)
+					print("End date: " + end_date + "\n")
 
-		if non_matching_folders == year_folders:
-			self.log_handler("Unexpected folder structure in " + str(path_with_titlecode))
+				self.log_handler("Number of matching " + ("issues: " if issues_only else "files: ") + str(total))
+				if not issues_only:
+					self.log_handler("Total size of files: " + self.convert_size(size) + "\n")
 
-		else:	
-			if self.logger == None:	
-				print("Directory: " + directory)
-				print("Titlecode: " + titlecode)
-				print("Start date: " + start_date)
-				print("End date: " + end_date + "\n")
+					if (total > 0):
+						if not total_only:
+							if 'IE_METS' in folders:
+								self.log_handler("IE_METS files: " + str(IE_METS_total))
+								self.log_handler("IE_METS size: " + self.convert_size(IE_METS_size) + "\n")
+							if 'PM_01' in folders:
+								self.log_handler("PM TIFF files: " + str(PM_total))
+								self.log_handler("PM TIFF size: " + self.convert_size(PM_size) + "\n")
+							if 'MM_01' in folders:
+								if 'TIFF' in file_types:
+									self.log_handler("MM TIFF files: " + str(MM_tiff_total))
+									self.log_handler("MM TIFF size: " + self.convert_size(MM_tiff_size) + "\n")
+								if 'METS' in file_types:
+									self.log_handler("MM METS files: " + str(MM_mets_total))
+									self.log_handler("MM METS size: " + self.convert_size(MM_mets_size) + "\n")
+								if 'ALTO' in file_types:
+									self.log_handler("MM ALTO files: " + str(MM_alto_total))
+									self.log_handler("MM ALTO size: " + self.convert_size(MM_alto_size) + "\n")
+							if 'AC_01' in folders:
+								if 'Page PDF' in file_types:
+									self.log_handler("AC Page PDF files: " + str(AC_page_total))
+									self.log_handler("AC Page PDF size: " + self.convert_size(AC_page_size) + "\n")
+								if 'Issue PDF' in file_types:
+									self.log_handler("AC Issue PDF files: " + str(AC_issue_total))
+									self.log_handler("AC Issue PDF files: " + self.convert_size(AC_issue_size) + "\n")
 
-			self.log_handler("Number of matching " + ("issues: " if issues_only else "files: ") + str(total))
-			if not issues_only:
-				self.log_handler("Total size of files: " + self.convert_size(size) + "\n")
+						self.log_handler("Latest created date: " + datetime.datetime.fromtimestamp(created).strftime("%b %d %Y %H:%M"))
+						self.log_handler("Latest modified date: " + datetime.datetime.fromtimestamp(modified).strftime("%b %d %Y %H:%M") + "\n")
+						
+				return [total, self.convert_size(size)]
 
-				if (total > 0):
-					if not total_only:
-						if 'IE_METS' in folders:
-							self.log_handler("IE_METS files: " + str(IE_METS_total))
-							self.log_handler("IE_METS size: " + self.convert_size(IE_METS_size) + "\n")
-						if 'PM_01' in folders:
-							self.log_handler("PM TIFF files: " + str(PM_total))
-							self.log_handler("PM TIFF size: " + self.convert_size(PM_size) + "\n")
-						if 'MM_01' in folders:
-							if 'TIFF' in file_types:
-								self.log_handler("MM TIFF files: " + str(MM_tiff_total))
-								self.log_handler("MM TIFF size: " + self.convert_size(MM_tiff_size) + "\n")
-							if 'METS' in file_types:
-								self.log_handler("MM METS files: " + str(MM_mets_total))
-								self.log_handler("MM METS size: " + self.convert_size(MM_mets_size) + "\n")
-							if 'ALTO' in file_types:
-								self.log_handler("MM ALTO files: " + str(MM_alto_total))
-								self.log_handler("MM ALTO size: " + self.convert_size(MM_alto_size) + "\n")
-						if 'AC_01' in folders:
-							if 'Page PDF' in file_types:
-								self.log_handler("AC Page PDF files: " + str(AC_page_total))
-								self.log_handler("AC Page PDF size: " + self.convert_size(AC_page_size) + "\n")
-							if 'Issue PDF' in file_types:
-								self.log_handler("AC Issue PDF files: " + str(AC_issue_total))
-								self.log_handler("AC Issue PDF files: " + self.convert_size(AC_issue_size) + "\n")
-
-					self.log_handler("Latest created date: " + datetime.datetime.fromtimestamp(created).strftime("%b %d %Y %H:%M"))
-					self.log_handler("Latest modified date: " + datetime.datetime.fromtimestamp(modified).strftime("%b %d %Y %H:%M") + "\n")
-					
-		return [total, self.convert_size(size)]
+		except BaseException as exception:
+			self.log_handler("An error occured: ")
+			self.log_handler(f"Exception Name: {type(exception).__name__}")
+			self.log_handler(f"Exception Desc: {exception}")
 
 # if __name__ == '__main__':
 # 	commands = {'directory': '', 'titlecode': '', 'start_date': '', 'end_date': '', 'file_type': ''}
