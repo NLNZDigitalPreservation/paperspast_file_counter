@@ -106,7 +106,7 @@ class TestFileTypesValidation(unittest.TestCase):
         log_handler = MagicMock()
         result = file_types(file, path, extensions, log_handler)
         self.assertFalse(result)
-        log_handler.assert_called_once_with(f"Unexpected file {file} in /some/path \n")
+        log_handler.assert_called_once_with(f"Unexpected file {file.name} in /some/path \n")
 
 class TestIEMetsFileValidation(unittest.TestCase):
     def test_ie_mets_file_valid(self):
@@ -127,7 +127,7 @@ class TestIEMetsFileValidation(unittest.TestCase):
         log_handler = MagicMock()
         result = ie_mets_file(file, issue, path, log_handler)
         self.assertFalse(result)
-        log_handler.assert_called_once_with(f"Unexpected file {file} in /some/path \n")
+        log_handler.assert_called_once_with(f"Unexpected file {file.name} in /some/path \n")
 
 if __name__ == '__main__':
 	unittest.main()
