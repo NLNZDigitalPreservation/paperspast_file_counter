@@ -1,4 +1,4 @@
-import datetime, math, re, sys, time
+import datetime, math, re, sys, time, traceback
 from pathlib import Path
 
 import validation
@@ -222,10 +222,12 @@ class FileCounter():
 						
 				return [total, self.convert_size(size)]
 
-		except BaseException as exception:
-			self.log_handler("An error occured: ")
-			self.log_handler(f"Exception Name: {type(exception).__name__}")
-			self.log_handler(f"Exception Desc: {exception}")
+		# except BaseException as exception:
+		# 	self.log_handler("An error occured: ")
+		# 	self.log_handler(f"Exception Name: {type(exception).__name__}")
+		# 	self.log_handler(f"Exception Desc: {exception}")
+		except:
+			self.log_handler(traceback.format_exc())
 
 # if __name__ == '__main__':
 # 	commands = {'directory': '', 'titlecode': '', 'start_date': '', 'end_date': '', 'file_type': ''}
