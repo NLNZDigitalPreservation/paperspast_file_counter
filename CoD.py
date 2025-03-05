@@ -87,21 +87,31 @@ class CoDUI(QMainWindow):
 		self.files_radio.adjustSize() 
 
 		self.pm_group = self.findChild(QGroupBox, "pm_group")
-		self.pm_group.adjustSize()
+		self.pm_group.setLayout(QVBoxLayout())  # Set a layout that can adapt to the scale
 
 		self.ie_mets_group = self.findChild(QGroupBox, "ie_mets_group")
-		self.ie_mets_group.adjustSize()
+		self.ie_mets_group.setLayout(QVBoxLayout())  # Set a layout that can adapt to the scale
 
 		self.mm_group = self.findChild(QGroupBox, "mm_group")
-		self.mm_group.adjustSize()
+		self.mm_group.setLayout(QVBoxLayout())  # Set a layout that can adapt to the scale
 		self.mm_alto_check = self.findChild(QCheckBox, "mm_alto_check")
 		self.mm_mets_check = self.findChild(QCheckBox, "mm_mets_check")
 		self.mm_tiff_check = self.findChild(QCheckBox, "mm_tiff_check")
 
 		self.ac_group = self.findChild(QGroupBox, "ac_group")
-		self.ac_group.adjustSize()
+		self.ac_group.setLayout(QVBoxLayout())
 		self.ac_page_check = self.findChild(QCheckBox, "ac_page_check")
 		self.ac_issue_check = self.findChild(QCheckBox, "ac_issue_check")
+
+		# ...
+
+		self.pm_group.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+		self.ie_mets_group.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+		self.mm_group.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+		self.ac_group.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+		# ...
+
 
 		self.total_only_check = self.findChild(QCheckBox, "total_only_check")
 		self.total_only_check.adjustSize() 
