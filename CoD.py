@@ -58,11 +58,22 @@ class CoDUI(QMainWindow):
 		self.issues_only = False
 		self.total_size = False
 
+		# Directory widgets
+		self.directory_label = self.findChild(QLabel, "directory_label")
+		self.directory_label.adjustSize()
 		self.directory_input = self.findChild(QLineEdit, "directory_input")
 		self.directory_button = self.findChild(QPushButton, "directory_button")
 		self.directory_button.setIcon(self.style().standardIcon(QStyle.SP_DirOpenIcon))
+		# Title code widgets
+		self.title_code_label = self.findChild(QLabel, "title_code_label")
+		self.title_code_label.adjustSize()
 		self.title_code_input = self.findChild(QLineEdit, "title_code_input")
+		# Date widgets
+		self.start_date_label = self.findChild(QLabel, "start_date_label")
+		self.start_date_label.adjustSize()
 		self.start_date_input = self.findChild(QLineEdit, "start_date_input")
+		self.end_date_label = self.findChild(QLabel, "end_date_label")
+		self.end_date_label.adjustSize()
 		self.end_date_input = self.findChild(QLineEdit, "end_date_input")
 		self.start_button = self.findChild(QPushButton, "start_button")
 		self.results_box = self.findChild(QTextBrowser, "results_box")
@@ -70,23 +81,30 @@ class CoDUI(QMainWindow):
 
 		self.issues_radio = self.findChild(QRadioButton, "issues_radio")
 		self.issues_radio.toggled.connect(self.toggleSearchType)
+		self.issues_radio.adjustSize() 
 		self.files_radio = self.findChild(QRadioButton, "files_radio")
 		self.files_radio.toggled.connect(self.toggleSearchType)
+		self.files_radio.adjustSize() 
 
 		self.pm_group = self.findChild(QGroupBox, "pm_group")
+		self.pm_group.adjustSize()
 
 		self.ie_mets_group = self.findChild(QGroupBox, "ie_mets_group")
+		self.ie_mets_group.adjustSize()
 
 		self.mm_group = self.findChild(QGroupBox, "mm_group")
+		self.mm_group.adjustSize()
 		self.mm_alto_check = self.findChild(QCheckBox, "mm_alto_check")
 		self.mm_mets_check = self.findChild(QCheckBox, "mm_mets_check")
 		self.mm_tiff_check = self.findChild(QCheckBox, "mm_tiff_check")
 
 		self.ac_group = self.findChild(QGroupBox, "ac_group")
+		self.ac_group.adjustSize()
 		self.ac_page_check = self.findChild(QCheckBox, "ac_page_check")
 		self.ac_issue_check = self.findChild(QCheckBox, "ac_issue_check")
 
 		self.total_only_check = self.findChild(QCheckBox, "total_only_check")
+		self.total_only_check.adjustSize() 
 
 		date_validator = QIntValidator(0, 99999999, self)
 		self.start_date_input.setValidator(date_validator)
@@ -203,7 +221,6 @@ class CoDUI(QMainWindow):
 				self.counting = True
 
 				self.worker.start()
-
 
 app = QApplication(sys.argv)
 UIWindow = CoDUI()

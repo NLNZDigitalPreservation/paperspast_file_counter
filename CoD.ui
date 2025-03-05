@@ -322,6 +322,12 @@
      <property name="text">
       <string>Page PDF</string>
      </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
     <widget class="QCheckBox" name="ac_issue_check">
      <property name="geometry">
@@ -336,6 +342,9 @@
       <string>Issue PDF</string>
      </property>
      <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
       <bool>true</bool>
      </property>
     </widget>
@@ -415,6 +424,12 @@
      <property name="text">
       <string>TIFF</string>
      </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
     <widget class="QCheckBox" name="mm_alto_check">
      <property name="geometry">
@@ -428,6 +443,12 @@
      <property name="text">
       <string>ALTO</string>
      </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
     <widget class="QCheckBox" name="mm_mets_check">
      <property name="geometry">
@@ -440,6 +461,12 @@
      </property>
      <property name="text">
       <string>METS</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
