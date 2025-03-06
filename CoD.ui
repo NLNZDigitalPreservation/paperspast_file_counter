@@ -386,6 +386,7 @@
      </property>
     </widget>
    </widget>
+   
    <widget class="QGroupBox" name="mm_group">
     <property name="geometry">
      <rect>
@@ -470,6 +471,7 @@
      </property>
     </widget>
    </widget>
+
    <widget class="QRadioButton" name="files_radio">
     <property name="geometry">
      <rect>
